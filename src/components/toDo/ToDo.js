@@ -1,40 +1,26 @@
 import React, { Component } from "react";
-import styles from "./style.module.css";
-import idGenerator from "../../helpers/idGenerator";
+//import styles from "./style.module.css";
 import Container from "react-bootstrap/Container";
 import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
-import { Card } from "react-bootstrap";
-import { Button, InputGroup, Form } from "react-bootstrap";
+import Task from "../Task/Task";
+import NewTask from "../newTask/NewTask";
+import Confirm from "../Confirm";
+
+import { Button} from "react-bootstrap";
 
 class ToDo extends Component {
   state = {
-    inputValue: "",
     tasks: [],
+    selectedTasks: new Set(),
+    showConfirm: false,
   };
 
-  getValue = (e) => {
-    this.setState({
-      inputValue: e.target.value,
-    });
-  };
-
-  addTask = () => {
+  addTask = (newTask) => {
     const { tasks } = this.state;
-    const inputValue = this.state.inputValue.trim();
-
-    if (inputValue === "") {
-      return;
-    }
-
-    const newTask = {
-      _id: idGenerator(),
-      title: inputValue,
-    };
 
     this.setState({
       tasks: [...tasks, newTask],
-      inputValue: "",
     });
   };
 
@@ -45,26 +31,49 @@ class ToDo extends Component {
     });
   };
 
+  toggleSelectTask = (taskId) => {
+    const selectedTasks = new Set(this.state.selectedTasks);
+    if (selectedTasks.has(taskId)) {
+      selectedTasks.delete(taskId);
+    } else {
+      selectedTasks.add(taskId);
+    }
+
+    this.setState({
+      selectedTasks,
+    });
+  };
+
+  deleteSelectedTasks = () => {
+    const { selectedTasks } = this.state;
+    const tasks = [...this.state.tasks];
+    const restOfTasks = tasks.filter((task) => !selectedTasks.has(task._id));
+
+    this.setState({
+      tasks: restOfTasks,
+      selectedTasks: new Set(),
+      showConfirm: false,
+    });
+  };
+
+  toggleConfirm = () => {
+    this.setState({
+      showConfirm: !this.state.showConfirm,
+    });
+  };
+
   render() {
-    const { tasks, inputValue } = this.state;
+    const { tasks, selectedTasks, showConfirm } = this.state;
 
     const taskComponents = tasks.map((task) => {
       return (
         <Col key={task._id} xs={6} sm={4} md={3} lg={2} xl={2}>
-          <Card className={styles.task}>
-            <Card.Body>
-              <Card.Title>
-                {task.title}
-              </Card.Title>
-              <Card.Text>Some twxt</Card.Text>
-              <Button
-                variant="danger"
-                onClick={() => this.deleteTask(task._id)}
-              >
-                Delete
-              </Button>
-            </Card.Body>
-          </Card>
+          <Task
+            data={task}
+            selectedData={selectedTasks}
+            onToggleSelectTask={this.toggleSelectTask}
+            onDeleteTask={this.deleteTask}
+          />
         </Col>
       );
     });
@@ -75,24 +84,29 @@ class ToDo extends Component {
         <Container>
           <Row className="justify-content-center">
             <Col xs={10}>
-              <InputGroup className="mb-3">
-                <Form.Control
-                  placeholder="Your Task Is..."
-                  onChange={this.getValue}
-                  value={inputValue}
-                />
-                <Button
-                  onClick={this.addTask}
-                  variant="outline-primary"
-                  id="button-addon2"
-                >
-                  Add Task
-                </Button>
-              </InputGroup>
+              <NewTask selectedTasks={selectedTasks} onAdd={this.addTask} />
+            </Col>
+          </Row>
+          <Row>
+            <Col>
+              <Button
+                variant="danger"
+                onClick={this.toggleConfirm}
+                disabled={selectedTasks.size === 0}
+              >
+                Delete selected Tasks
+              </Button>
             </Col>
           </Row>
           <Row>{taskComponents}</Row>
         </Container>
+        {showConfirm && (
+          <Confirm
+            onClose={this.toggleConfirm}
+            onDelete={this.deleteSelectedTasks}
+            numOfSelectedTasks={selectedTasks.size}            
+          />
+        )}
       </div>
     );
   }
