@@ -2,6 +2,8 @@ import React, { Component } from "react";
 import { Card, Button } from "react-bootstrap";
 import styles from "./taskStyle.module.css";
 import PropTypes from "prop-types";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faTrash, faPenToSquare } from "@fortawesome/free-solid-svg-icons";
 
 class Task extends Component {
   static propTypes = {
@@ -11,38 +13,45 @@ class Task extends Component {
     onDeleteTask: PropTypes.func.isRequired,
   };
 
-  state = {
-    selected: false,
-  };
-
   handleChange = () => {
     const { onToggleSelectTask, data } = this.props;
     onToggleSelectTask(data._id);
-
-    this.setState({
-      selected: !this.state.selected,
-    });
   };
 
   render() {
-    const { data, selectedData } = this.props;
+    const { data, selectedData, isSelected } = this.props;
     const { onDeleteTask } = this.props;
     const task = data;
     const selectedTasks = selectedData;
-    const { selected } = this.state;
 
     return (
-      <Card className={`${styles.task} ${selected ? styles.selected : ""}`}>
+      <Card className={`${styles.task} ${isSelected ? styles.selected : ""}`}>
         <Card.Body>
-          <input type="checkbox" onChange={this.handleChange} />
-          <Card.Title>{task.title}</Card.Title>
-          <Card.Text>Some twxt</Card.Text>
+          <input
+            type="checkbox"
+            onChange={this.handleChange}
+            checked={isSelected}
+          />
+
+          <Card.Text>{task.title}</Card.Text>
+          <Card.Title>{task.description}</Card.Title>
+
           <Button
+            className="m-1"
+            variant="warning"
+            onClick={() => onDeleteTask(task._id)}
+            disabled={selectedTasks.size !== 0}
+          >
+            <FontAwesomeIcon icon={faPenToSquare} />
+          </Button>
+
+          <Button
+            className="m-1"
             variant="danger"
             onClick={() => onDeleteTask(task._id)}
             disabled={selectedTasks.size !== 0}
           >
-            Delete
+            <FontAwesomeIcon icon={faTrash} />
           </Button>
         </Card.Body>
       </Card>
