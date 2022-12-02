@@ -19,7 +19,7 @@ class Task extends Component {
   };
 
   render() {
-    const { data, selectedData, isSelected } = this.props;
+    const { data, selectedData, isSelected, onEdit } = this.props;
     const { onDeleteTask } = this.props;
     const task = data;
     const selectedTasks = selectedData;
@@ -39,7 +39,7 @@ class Task extends Component {
           <Button
             className="m-1"
             variant="warning"
-            onClick={() => onDeleteTask(task._id)}
+            onClick={() => onEdit(task)}
             disabled={selectedTasks.size !== 0}
           >
             <FontAwesomeIcon icon={faPenToSquare} />

@@ -6,7 +6,7 @@ import Col from "react-bootstrap/Col";
 import Task from "../Task/Task";
 import NewTask from "../newTask/NewTask";
 import Confirm from "../Confirm";
-
+import EditTaskModal from "../EditTaskModal";
 
 import { Button } from "react-bootstrap";
 
@@ -17,6 +17,7 @@ class ToDo extends Component {
     showConfirm: false,
     selectButtonStatus: "Select All",
     isOpenNewTaskModal: false,
+    editTask: null,
   };
 
   addTask = (newTask) => {
@@ -99,6 +100,22 @@ class ToDo extends Component {
     });
   };
 
+  handleEdit = (editTask) => {
+    this.setState({
+      editTask,
+    });
+  };
+
+  handleSaveTask = (editedTask) => {
+    const tasks = [...this.state.tasks];
+    const foundIndex = tasks.findIndex((task) => task._id === editedTask._id);
+    tasks[foundIndex] = editedTask;
+    this.setState({
+      tasks,
+      editTask: null,
+    })
+  };
+
   render() {
     const {
       isOpenNewTaskModal,
@@ -106,6 +123,7 @@ class ToDo extends Component {
       selectedTasks,
       showConfirm,
       selectButtonStatus,
+      editTask,
     } = this.state;
 
     const taskComponents = tasks.map((task) => {
@@ -117,6 +135,7 @@ class ToDo extends Component {
             onToggleSelectTask={this.toggleSelectTask}
             onDeleteTask={this.deleteTask}
             isSelected={selectedTasks.has(task._id)}
+            onEdit={this.handleEdit}
           />
         </Col>
       );
@@ -166,6 +185,14 @@ class ToDo extends Component {
 
         {isOpenNewTaskModal && (
           <NewTask onClose={this.toggleNewTaskModal} onAdd={this.addTask} />
+        )}
+
+        {editTask && (
+          <EditTaskModal
+            data={editTask}
+            onClose={() => this.handleEdit(null)}
+            onSave={this.handleSaveTask}
+          />
         )}
       </div>
     );
