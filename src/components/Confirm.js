@@ -39,4 +39,4 @@ Confirm.propTypes = {
   numOfSelectedTasks: PropTypes.number.isRequired,
 };
 
-export default React.memo(Confirm) ;
+export default Confirm;

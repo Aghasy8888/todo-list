@@ -1,4 +1,4 @@
-import React, { PureComponent } from "react";
+import React, { Component } from "react";
 //import styles from "./style.module.css";
 import Container from "react-bootstrap/Container";
 import Row from "react-bootstrap/Row";
@@ -10,7 +10,7 @@ import EditTaskModal from "../EditTaskModal";
 
 import { Button } from "react-bootstrap";
 
-class ToDo extends PureComponent {
+class ToDo extends Component {
   state = {
     tasks: [],
     selectedTasks: new Set(),
