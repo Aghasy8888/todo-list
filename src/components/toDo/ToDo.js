@@ -20,20 +20,91 @@ class ToDo extends Component {
     editTask: null,
   };
 
-  addTask = (newTask) => {
+  componentDidMount() {
     const { tasks } = this.state;
+    fetch("http://localhost:3001/task", {
+      method: "GET",
+      headers: {
+        "content-Type": "application/json",
+      },
+    })
+      .then(async (response) => {
+        const res = await response.json();
+        console.log("res", res);
 
-    this.setState({
-      tasks: [...tasks, newTask],
-      isOpenNewTaskModal: false,
-    });
+        if (response.status >= 400 && response.status < 600) {
+          if (res.error) {
+            throw res.error;
+          } else {
+            throw new Error("Something went wrong");
+          }
+        }
+
+        this.setState({
+          tasks: res,
+        });
+      })
+      .catch((error) => {
+        console.log("error catching bremn jan.", error);
+      });
+  }
+
+  addTask = (newTask) => {
+    fetch("http://localhost:3001/task", {
+      method: "POST",
+      body: JSON.stringify(newTask),
+      headers: {
+        "content-Type": "application/json",
+      },
+    })
+      .then(async (response) => {
+        const res = await response.json();
+        const { tasks } = this.state;
+
+        if (response.status >= 400 && response.status < 600) {
+          if (res.error) {
+            throw res.error;
+          } else {
+            throw new Error("Something went wrong");
+          }
+        }
+
+        this.setState({
+          tasks: [...tasks, res],
+          isOpenNewTaskModal: false,
+        });
+      })
+      .catch((error) => {
+        console.log("error catching bremn jan.", error);
+      });
   };
 
   deleteTask = (taskId) => {
-    const newTasks = this.state.tasks.filter((task) => task._id !== taskId);
-    this.setState({
-      tasks: newTasks,
-    });
+    fetch("http://localhost:3001/task" + taskId, {
+      method: "DELETE",
+      headers: {
+        "content-Type": "application/json",
+      },
+    })
+      .then(async (response) => {
+        const res = await response.json();
+
+        if (response.status >= 400 && response.status < 600) {
+          if (res.error) {
+            throw res.error;
+          } else {
+            throw new Error("Something went wrong");
+          }
+        }
+
+        const newTasks = this.state.tasks.filter((task) => task._id !== taskId);
+        this.setState({
+          tasks: newTasks,
+        });
+      })
+      .catch((error) => {
+        console.log("error catching bremn jan.", error);
+      });
   };
 
   toggleSelectTask = (taskId) => {
