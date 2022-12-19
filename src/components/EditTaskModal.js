@@ -1,12 +1,18 @@
 import React, { PureComponent } from "react";
 import { Button, Form, Modal } from "react-bootstrap";
 import PropTypes from "prop-types";
+import DatePicker from "react-datepicker";
+import "react-datepicker/dist/react-datepicker.css";
+import { formatDate } from "../helpers/utils";
 
 class EditTaskModal extends PureComponent {
   constructor(props) {
     super(props);
+    const { date } = props.data;
+
     this.state = {
       ...props.data,
+      date: date ? new Date(date) : new Date(),
     };
   }
 
@@ -42,6 +48,13 @@ class EditTaskModal extends PureComponent {
       title,
       description,
       _id: this.state._id,
+      date: formatDate(this.state.date.toISOString()),
+    });
+  };
+
+  getDateValue = (value) => {
+    this.setState({
+      date: value || new Date(),
     });
   };
 
@@ -78,6 +91,11 @@ class EditTaskModal extends PureComponent {
             value={description}
             rows={5}
             onChange={this.getValue}
+          />
+          <DatePicker
+            minDate={new Date()}
+            selected={this.state.date}
+            onChange={this.getDateValue}
           />
         </Modal.Body>
         <Modal.Footer>

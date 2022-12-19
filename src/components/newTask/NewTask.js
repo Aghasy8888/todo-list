@@ -1,6 +1,9 @@
 import React, { PureComponent } from "react";
 import { Button, Form, Modal } from "react-bootstrap";
 import PropTypes from "prop-types";
+import { formatDate } from "../../helpers/utils";
+import DatePicker from "react-datepicker";
+import "react-datepicker/dist/react-datepicker.css";
 
 class NewTask extends PureComponent {
   static propTypes = {
@@ -11,20 +14,15 @@ class NewTask extends PureComponent {
   state = {
     title: "",
     description: "",
+    date: new Date(),
   };
 
   getValue = (e) => {
     const { name, value } = e.target;
 
-    if (name === "Title") {
-      this.setState({
-        title: value,
-      });
-    } else {
-      this.setState({
-        description: value,
-      });
-    }
+    this.setState({
+      [name]: value,
+    });
   };
 
   addTaskWithEnter = (event) => {
@@ -36,17 +34,26 @@ class NewTask extends PureComponent {
   addTask = () => {
     const title = this.state.title.trim();
     const description = this.state.description.trim();
+    const { date } = this.state;
 
     if (title === "") {
       return;
     }
 
-    const newTask = {    
+    console.log(2, date);
+    const newTask = {
       title,
       description,
+      date: formatDate(date.toISOString()),
     };
-
     this.props.onAdd(newTask);
+  };
+
+  getDateValue = (value) => {
+    this.setState({
+      date: value || new Date(),
+    });
+    console.log(value, "000000");
   };
 
   render() {
@@ -68,7 +75,7 @@ class NewTask extends PureComponent {
         <Modal.Body>
           <Form.Control
             placeholder="Title"
-            name="Title"
+            name="title"
             onChange={this.getValue}
             onKeyPress={this.addTaskWithEnter}
             className="mb-3"
@@ -79,6 +86,11 @@ class NewTask extends PureComponent {
             placeholder="Add description here"
             rows={5}
             onChange={this.getValue}
+          />
+          <DatePicker
+            minDate={new Date()}
+            selected={this.state.date}
+            onChange={this.getDateValue}
           />
         </Modal.Body>
         <Modal.Footer>

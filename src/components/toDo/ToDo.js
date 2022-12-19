@@ -50,6 +50,7 @@ class ToDo extends Component {
   }
 
   addTask = (newTask) => {
+    console.log(1);
     fetch("http://localhost:3001/task", {
       method: "POST",
       body: JSON.stringify(newTask),
@@ -68,7 +69,7 @@ class ToDo extends Component {
             throw new Error("Something went wrong");
           }
         }
-
+        console.log("res", res);
         this.setState({
           tasks: [...tasks, res],
           isOpenNewTaskModal: false,
@@ -80,7 +81,7 @@ class ToDo extends Component {
   };
 
   deleteTask = (taskId) => {
-    fetch("http://localhost:3001/task" + taskId, {
+    fetch("http://localhost:3001/task/" + taskId, {
       method: "DELETE",
       headers: {
         "content-Type": "application/json",
@@ -122,14 +123,42 @@ class ToDo extends Component {
 
   deleteSelectedTasks = () => {
     const { selectedTasks } = this.state;
-    const tasks = [...this.state.tasks];
-    const restOfTasks = tasks.filter((task) => !selectedTasks.has(task._id));
+    const body = {
+      tasks: [...selectedTasks],
+    };
 
-    this.setState({
-      tasks: restOfTasks,
-      selectedTasks: new Set(),
-      showConfirm: false,
-    });
+    fetch("http://localhost:3001/task", {
+      method: "PATCH",
+      headers: {
+        "content-Type": "application/json",
+      },
+      body: JSON.stringify(body),
+    })
+      .then(async (response) => {
+        const res = await response.json();
+
+        if (response.status >= 400 && response.status < 600) {
+          if (res.error) {
+            throw res.error;
+          } else {
+            throw new Error("Something went wrong");
+          }
+        }
+
+        const tasks = [...this.state.tasks];
+        const restOfTasks = tasks.filter(
+          (task) => !selectedTasks.has(task._id)
+        );
+
+        this.setState({
+          tasks: restOfTasks,
+          selectedTasks: new Set(),
+          showConfirm: false,
+        });
+      })
+      .catch((error) => {
+        console.log("error catching bremn jan.", error);
+      });
   };
 
   toggleConfirm = () => {
@@ -178,13 +207,36 @@ class ToDo extends Component {
   };
 
   handleSaveTask = (editedTask) => {
-    const tasks = [...this.state.tasks];
-    const foundIndex = tasks.findIndex((task) => task._id === editedTask._id);
-    tasks[foundIndex] = editedTask;
-    this.setState({
-      tasks,
-      editTask: null,
-    });
+    fetch("http://localhost:3001/task/" + editedTask._id, {
+      method: "PUT",
+      headers: {
+        "content-Type": "application/json",
+      },
+      body: JSON.stringify(editedTask),
+    })
+      .then(async (response) => {
+        const res = await response.json();
+
+        if (response.status >= 400 && response.status < 600) {
+          if (res.error) {
+            throw res.error;
+          } else {
+            throw new Error("Something went wrong");
+          }
+        }
+        const tasks = [...this.state.tasks];
+        const foundIndex = tasks.findIndex(
+          (task) => task._id === editedTask._id
+        );
+        tasks[foundIndex] = editedTask;
+        this.setState({
+          tasks,
+          editTask: null,
+        });
+      })
+      .catch((error) => {
+        console.log("error catching bremn jan.", error);
+      });
   };
 
   render() {

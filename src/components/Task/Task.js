@@ -4,6 +4,7 @@ import styles from "./taskStyle.module.css";
 import PropTypes from "prop-types";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faTrash, faPenToSquare } from "@fortawesome/free-solid-svg-icons";
+import { formatDate } from "../../helpers/utils";
 
 class Task extends PureComponent {
   static propTypes = {
@@ -33,8 +34,12 @@ class Task extends PureComponent {
             checked={isSelected}
           />
 
-          <Card.Text>{task.title}</Card.Text>
-          <Card.Title>{task.description}</Card.Title>
+          <Card.Title>{task.title}</Card.Title>
+          <Card.Text>Description:{task.description}</Card.Text>
+          <Card.Text>
+            {/*Date:{task.data?.slice(0, 10)}*/}
+            Date:{formatDate(task.date)}
+          </Card.Text>
 
           <Button
             className="m-1"
