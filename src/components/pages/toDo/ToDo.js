@@ -3,10 +3,10 @@ import React, { Component } from "react";
 import Container from "react-bootstrap/Container";
 import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
-import Task from "../Task/Task";
-import NewTask from "../newTask/NewTask";
-import Confirm from "../Confirm";
-import EditTaskModal from "../EditTaskModal";
+import Task from "../../Task/Task";
+import NewTask from "../../newTask/NewTask";
+import Confirm from "../../Confirm";
+import EditTaskModal from "../../EditTaskModal";
 
 import { Button } from "react-bootstrap";
 

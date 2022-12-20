@@ -5,6 +5,7 @@ import PropTypes from "prop-types";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faTrash, faPenToSquare } from "@fortawesome/free-solid-svg-icons";
 import { formatDate } from "../../helpers/utils";
+import { Link } from "react-router-dom";
 
 class Task extends PureComponent {
   static propTypes = {
@@ -34,7 +35,10 @@ class Task extends PureComponent {
             checked={isSelected}
           />
 
-          <Card.Title>{task.title}</Card.Title>
+          <Link to='/task'>
+            <Card.Title>{task.title}</Card.Title>
+          </Link>
+
           <Card.Text>Description:{task.description}</Card.Text>
           <Card.Text>
             {/*Date:{task.data?.slice(0, 10)}*/}
