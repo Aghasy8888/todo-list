@@ -21,7 +21,6 @@ class ToDo extends Component {
   };
 
   componentDidMount() {
-    const { tasks } = this.state;
     fetch("http://localhost:3001/task", {
       method: "GET",
       headers: {
@@ -30,7 +29,6 @@ class ToDo extends Component {
     })
       .then(async (response) => {
         const res = await response.json();
-        console.log("res", res);
 
         if (response.status >= 400 && response.status < 600) {
           if (res.error) {
