@@ -1,18 +1,23 @@
-import React, { Component } from "react";
+import React, { Component, useEffect, useState } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faTrash, faPenToSquare } from "@fortawesome/free-solid-svg-icons";
 import { Card, Button, Container, Row, Col } from "react-bootstrap";
 import { formatDate } from "../../../helpers/utils";
 import EditTaskModal from "../../EditTaskModal";
+import { useNavigate, useParams } from "react-router";
 
-export default class SingleTask extends Component {
-  state = {
+export default function SingleTask() {
+  const [values, setValues] = useState({
     task: null,
     openEditModal: false,
-  };
+  });
+  const history = useNavigate();
+  const params = useParams();
 
-  componentDidMount() {
-    const taskId = this.props.match.params.taskId;
+  const { task, openEditModal } = values;
+
+  useEffect(() => {
+    const taskId = params.taskId;
     console.log("taskId", taskId);
     fetch("http://localhost:3001/task/" + taskId, {
       method: "GET",
@@ -32,17 +37,18 @@ export default class SingleTask extends Component {
           }
         }
 
-        this.setState({
+        setValues({
+          ...values,
           task: res,
         });
       })
       .catch((error) => {
         console.log("error catching bremn jan.", error);
       });
-  }
+  }, []);
 
-  deleteTask = () => {
-    const taskId = this.state.task._id;
+  const deleteTask = () => {
+    const taskId = task._id;
 
     fetch("http://localhost:3001/task/" + taskId, {
       method: "DELETE",
@@ -61,14 +67,14 @@ export default class SingleTask extends Component {
           }
         }
 
-        this.props.history.push("/");
+        history("/");
       })
       .catch((error) => {
         console.log("error catching bremn jan.", error);
       });
   };
 
-  handleSaveTask = (editedTask) => {
+  const handleSaveTask = (editedTask) => {
     fetch("http://localhost:3001/task/" + editedTask._id, {
       method: "PUT",
       headers: {
@@ -87,7 +93,8 @@ export default class SingleTask extends Component {
           }
         }
 
-        this.setState({
+        setValues({
+          ...values,
           task: res,
           openEditModal: false,
         });
@@ -97,62 +104,55 @@ export default class SingleTask extends Component {
       });
   };
 
-  toggleEditModal = () => {
-    this.setState({
-      openEditModal: !this.state.openEditModal,
+  const toggleEditModal = () => {
+    setValues({
+      ...values,
+      openEditModal: !values.openEditModal,
     });
   };
 
-  render() {
-    const { task, openEditModal } = this.state;
+  return (
+    <div className="mt-5">
+      <Container>
+        <Row>
+          <Col xs={12}>
+            {task ? (
+              <Card className="text-center">
+                <Card.Body>
+                  <Card.Title>{task.title}</Card.Title>
 
-    return (
-      <div className="mt-5">
-        <Container>
-          <Row>
-            <Col xs={12}>
-              {task ? (
-                <Card className="text-center">
-                  <Card.Body>
-                    <Card.Title>{task.title}</Card.Title>
+                  <Card.Text>Description:{task.description}</Card.Text>
+                  <Card.Text>
+                    {/*Date:{task.data?.slice(0, 10)}*/}
+                    Date:{formatDate(task.date)}
+                  </Card.Text>
 
-                    <Card.Text>Description:{task.description}</Card.Text>
-                    <Card.Text>
-                      {/*Date:{task.data?.slice(0, 10)}*/}
-                      Date:{formatDate(task.date)}
-                    </Card.Text>
+                  <Button
+                    className="m-1"
+                    variant="warning"
+                    onClick={toggleEditModal}
+                  >
+                    <FontAwesomeIcon icon={faPenToSquare} />
+                  </Button>
 
-                    <Button
-                      className="m-1"
-                      variant="warning"
-                      onClick={this.toggleEditModal}
-                    >
-                      <FontAwesomeIcon icon={faPenToSquare} />
-                    </Button>
-
-                    <Button
-                      className="m-1"
-                      variant="danger"
-                      onClick={this.deleteTask}
-                    >
-                      <FontAwesomeIcon icon={faTrash} />
-                    </Button>
-                  </Card.Body>
-                </Card>
-              ) : (
-                <p>Task data doesn't exist!!</p>
-              )}
-            </Col>
-          </Row>
-        </Container>
-        {openEditModal && (
-          <EditTaskModal
-            data={task}
-            onClose={this.toggleEditModal}
-            onSave={this.handleSaveTask}
-          />
-        )}
-      </div>
-    );
-  }
+                  <Button className="m-1" variant="danger" onClick={deleteTask}>
+                    <FontAwesomeIcon icon={faTrash} />
+                  </Button>
+                </Card.Body>
+              </Card>
+            ) : (
+              <p>Task data doesn't exist!!</p>
+            )}
+          </Col>
+        </Row>
+      </Container>
+      {openEditModal && (
+        <EditTaskModal
+          data={task}
+          onClose={toggleEditModal}
+          onSave={handleSaveTask}
+        />
+      )}
+    </div>
+  );
 }
