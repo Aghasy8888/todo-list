@@ -14,6 +14,8 @@ function App() {
   return (
     <div className="App">
       {/*<ToDo />*/}
+
+
       <BrowserRouter>
         <NavMenu />
         <Routes>
@@ -25,7 +27,8 @@ function App() {
           <Route path="/task/:taskId" element={<SingleTask />} />
           <Route path="*" element={<Navigate to="/not-found" replace />} />
         </Routes>
-      </BrowserRouter>
+      </BrowserRouter> 
+
     </div>
   );
 }
