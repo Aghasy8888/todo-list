@@ -1,4 +1,8 @@
-export default function reducer(state = { count: 0 }, action) {
+const defaultState = { 
+    tasks: [],
+ }
+
+export default function reducer(state = defaultState, action) {
     switch (action.type) {
       case "INCREMENT": {
         return {
@@ -13,6 +17,14 @@ export default function reducer(state = { count: 0 }, action) {
           count: state.count - 1,
         };
       }
+
+      case "GET_TASKS": {
+        return {
+          ...state,
+          tasks: action.tasks
+        };
+      }
+
       default:
         return state;
     }
