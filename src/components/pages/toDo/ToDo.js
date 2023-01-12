@@ -40,6 +40,13 @@ class ToDo extends Component {
       });
       return;
     }
+
+    if (!prevProps.editTasksSuccess && this.props.editTasksSuccess) {
+      this.setState({
+        editTask: null,
+      });
+      return;
+    }
   }
 
  
@@ -219,7 +226,7 @@ class ToDo extends Component {
           <EditTaskModal
             data={editTask}
             onClose={() => this.handleEdit(null)}
-            onSave={this.handleSaveTask}
+            //onSave={this.handleSaveTask}
           />
         )}
       </div>
@@ -232,6 +239,7 @@ const mapStateToProps = (state) => {
     tasks: state.tasks,
     addTaskSuccess: state.addTaskSuccess,
     deleteTasksSuccess: state.deleteTasksSuccess,
+    editTasksSuccess: state.editTasksSuccess,
   };
 };
 

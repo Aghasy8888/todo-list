@@ -8,13 +8,14 @@ import Contact from "./components/pages/contact/Contact";
 import NotFound from "./components/pages/notFound/NotFound";
 import NavMenu from "./components/pages/NavMenu/NavMenu";
 import SingleTask from "./components/pages/SIngleTask/SingleTask";
+import Spinner from "./components/Spinner/Spinner";
+import { connect } from "react-redux";
 
 //import Conditional from "./demo/conditional/Conditional";
-function App() {
+function App({ loading }) {
   return (
     <div className="App">
       {/*<ToDo />*/}
-
 
       <BrowserRouter>
         <NavMenu />
@@ -27,10 +28,16 @@ function App() {
           <Route path="/task/:taskId" element={<SingleTask />} />
           <Route path="*" element={<Navigate to="/not-found" replace />} />
         </Routes>
-      </BrowserRouter> 
-
+      </BrowserRouter>
+      {loading && <Spinner />}
     </div>
   );
 }
 
-export default App;
+const mapStateToProps = (state) => {
+  return {
+    loading: state.loading,
+  };
+};
+
+export default connect(mapStateToProps)(App);
