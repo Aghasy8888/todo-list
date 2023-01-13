@@ -61,9 +61,7 @@ export default function reducer(state = defaultState, action) {
     }
 
     case actionTypes.DELETE_TASK: {
-      const newTasks = state.tasks.filter(
-        (task) => action.task._id !== action.taskId
-      );
+      const newTasks = state.tasks.filter((task) => task._id !== action.taskId);
       return {
         ...state,
         tasks: newTasks,
@@ -89,7 +87,7 @@ export default function reducer(state = defaultState, action) {
     }
 
     case actionTypes.EDIT_TASK: {
-      if(action.from === "single") {
+      if (action.from === "single") {
         return {
           ...state,
           task: action.editedTask,

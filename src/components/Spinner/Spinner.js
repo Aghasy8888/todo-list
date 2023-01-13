@@ -1,5 +1,5 @@
 import React, { useEffect } from "react";
-import { Spinner as BSpinner } from "react-bootstrap/Spinner";
+import BSpinner from "react-bootstrap/Spinner";
 import styles from "./SpinnerStyle.module.css";
 
 export default function Spinner() {
