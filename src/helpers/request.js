@@ -24,8 +24,5 @@ export default function request(url, method = "GET", body) {
       }
       console.log("res 555", res);
       return res;
-    })
-    .catch((error) => {
-      console.log("error catching bremn jan.", error);
-    });
+    })    
 }

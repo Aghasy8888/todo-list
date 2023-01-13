@@ -45,12 +45,14 @@ class EditTaskModal extends PureComponent {
       return;
     }
 
-    this.props.editTask({
+    const editedTask = {
       title,
       description,
       _id: this.state._id,
       date: formatDate(this.state.date.toISOString()),
-    });
+    }
+
+    this.props.editTask(editedTask, this.props.from);
   };
 
   getDateValue = (value) => {

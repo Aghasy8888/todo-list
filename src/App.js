@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import "./App.css";
 import ToDo from "./components/pages/toDo/ToDo";
 import "bootstrap/dist/css/bootstrap.min.css";
@@ -10,9 +10,38 @@ import NavMenu from "./components/pages/NavMenu/NavMenu";
 import SingleTask from "./components/pages/SIngleTask/SingleTask";
 import Spinner from "./components/Spinner/Spinner";
 import { connect } from "react-redux";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 //import Conditional from "./demo/conditional/Conditional";
-function App({ loading }) {
+function App({ loading, successMessage, errorMessage }) {
+  useEffect(() => {
+    if (successMessage) {
+      toast.success(successMessage, {
+        position: "bottom-left",
+        autoClose: 5000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,       
+        theme: "light",
+      });
+    }
+
+    if (errorMessage) {
+      toast.error(errorMessage, {
+        position: "bottom-left",
+        autoClose: 5000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,       
+        theme: "light",
+      });
+    }
+
+  }, [successMessage, errorMessage]);
+
   return (
     <div className="App">
       {/*<ToDo />*/}
@@ -30,6 +59,7 @@ function App({ loading }) {
         </Routes>
       </BrowserRouter>
       {loading && <Spinner />}
+      <ToastContainer />
     </div>
   );
 }
@@ -37,6 +67,8 @@ function App({ loading }) {
 const mapStateToProps = (state) => {
   return {
     loading: state.loading,
+    successMessage: state.successMessage,
+    errorMessage: state.errorMessage,
   };
 };
 

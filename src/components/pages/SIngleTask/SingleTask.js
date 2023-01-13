@@ -1,50 +1,26 @@
-import React, { Component, useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faTrash, faPenToSquare } from "@fortawesome/free-solid-svg-icons";
 import { Card, Button, Container, Row, Col } from "react-bootstrap";
 import { formatDate } from "../../../helpers/utils";
 import EditTaskModal from "../../EditTaskModal";
 import { useNavigate, useParams } from "react-router";
+import { getSingleTask } from "../../../store/actions";
+import { connect } from "react-redux";
 
-export default function SingleTask() {
+function SingleTask() {
   const [values, setValues] = useState({
-    task: null,
     openEditModal: false,
   });
   const history = useNavigate();
   const params = useParams();
 
-  const { task, openEditModal } = values;
+  const { openEditModal } = values;
+  const { task } = this.props;
 
   useEffect(() => {
     const taskId = params.taskId;
-    console.log("taskId", taskId);
-    fetch("http://localhost:3001/task/" + taskId, {
-      method: "GET",
-      headers: {
-        "content-Type": "application/json",
-      },
-    })
-      .then(async (response) => {
-        const res = await response.json();
-        console.log("res", res);
-
-        if (response.status >= 400 && response.status < 600) {
-          if (res.error) {
-            throw res.error;
-          } else {
-            throw new Error("Something went wrong");
-          }
-        }
-
-        setValues({
-          ...values,
-          task: res,
-        });
-      })
-      .catch((error) => {
-        console.log("error catching bremn jan.", error);
-      });
+    this.props.getSingleTask(taskId);
   }, []);
 
   const deleteTask = () => {
@@ -68,36 +44,6 @@ export default function SingleTask() {
         }
 
         history("/");
-      })
-      .catch((error) => {
-        console.log("error catching bremn jan.", error);
-      });
-  };
-
-  const handleSaveTask = (editedTask) => {
-    fetch("http://localhost:3001/task/" + editedTask._id, {
-      method: "PUT",
-      headers: {
-        "content-Type": "application/json",
-      },
-      body: JSON.stringify(editedTask),
-    })
-      .then(async (response) => {
-        const res = await response.json();
-
-        if (response.status >= 400 && response.status < 600) {
-          if (res.error) {
-            throw res.error;
-          } else {
-            throw new Error("Something went wrong");
-          }
-        }
-
-        setValues({
-          ...values,
-          task: res,
-          openEditModal: false,
-        });
       })
       .catch((error) => {
         console.log("error catching bremn jan.", error);
@@ -150,9 +96,21 @@ export default function SingleTask() {
         <EditTaskModal
           data={task}
           onClose={toggleEditModal}
-          onSave={handleSaveTask}
+          from="single"
         />
       )}
     </div>
   );
 }
+
+const mapDispatchToProps = {
+  getSingleTask,
+};
+
+const mapStateToProps = (state) => {
+  return {
+    task: state.task,
+  };
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(SingleTask);
