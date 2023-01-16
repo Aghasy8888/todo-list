@@ -28,7 +28,7 @@ class NewTask extends PureComponent {
 
   addTaskWithEnter = (event) => {
     if (event.key === "Enter") {
-      this.props.addTask();
+      this.handleSave();
     }
   };
 
