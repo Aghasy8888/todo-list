@@ -1,5 +1,7 @@
 import request from "../helpers/request";
 import * as actionTypes from "./actionTypes";
+import {useNavigate} from 'react-router-dom';
+
 
 export function getTasks() {
   return (dispatch) => {
@@ -43,12 +45,16 @@ export function addTask(newTask) {
   };
 }
 
-export function deleteTask(taskId) {
+export function DeleteTask(taskId, from) {
+  const navigate = useNavigate();
   return function (dispatch) {
     dispatch({ type: actionTypes.PENDING });
     request(`http://localhost:3001/task/${taskId}`, "DELETE")
       .then(() => {
-        dispatch({ type: actionTypes.DELETE_TASK, taskId });
+        dispatch({ type: actionTypes.DELETE_TASK, taskId, from });
+        if(from==="single") {        
+          navigate('/')
+        }
       })
       .catch((error) => {
         console.log("error catching bremn jan.", error);

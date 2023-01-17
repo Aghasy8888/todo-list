@@ -4,50 +4,53 @@ import { faTrash, faPenToSquare } from "@fortawesome/free-solid-svg-icons";
 import { Card, Button, Container, Row, Col } from "react-bootstrap";
 import { formatDate } from "../../../helpers/utils";
 import EditTaskModal from "../../EditTaskModal";
-import { useNavigate, useParams } from "react-router";
-import { getSingleTask } from "../../../store/actions";
+import { useParams } from "react-router";
+import { getSingleTask, DeleteTask } from "../../../store/actions";
 import { connect } from "react-redux";
+import { useNavigate } from "react-router-dom";
 
-function SingleTask() {
+function SingleTask(props) {
   const [values, setValues] = useState({
     openEditModal: false,
   });
-  const history = useNavigate();
+
   const params = useParams();
 
   const { openEditModal } = values;
-  const { task } = this.props;
+  const { task } = props;
 
   useEffect(() => {
     const taskId = params.taskId;
-    this.props.getSingleTask(taskId);
+    props.getSingleTask(taskId);
   }, []);
 
-  const deleteTask = () => {
-    const taskId = task._id;
+  const DeleteTask = () => {
+    const navigate = useNavigate();
+    const taskId = params.taskId;
+    props.DeleteTask(taskId, "single");
+    navigate("/");
+    // fetch("http://localhost:3001/task/" + taskId, {
+    //   method: "DELETE",
+    //   headers: {
+    //     "content-Type": "application/json",
+    //   },
+    // })
+    //   .then(async (response) => {
+    //     const res = await response.json();
 
-    fetch("http://localhost:3001/task/" + taskId, {
-      method: "DELETE",
-      headers: {
-        "content-Type": "application/json",
-      },
-    })
-      .then(async (response) => {
-        const res = await response.json();
+    //     if (response.status >= 400 && response.status < 600) {
+    //       if (res.error) {
+    //         throw res.error;
+    //       } else {
+    //         throw new Error("Something went wrong");
+    //       }
+    //     }
 
-        if (response.status >= 400 && response.status < 600) {
-          if (res.error) {
-            throw res.error;
-          } else {
-            throw new Error("Something went wrong");
-          }
-        }
-
-        history("/");
-      })
-      .catch((error) => {
-        console.log("error catching bremn jan.", error);
-      });
+    //     history("/");
+    //   })
+    //   .catch((error) => {
+    //     console.log("error catching bremn jan.", error);
+    //   });
   };
 
   const toggleEditModal = () => {
@@ -81,7 +84,7 @@ function SingleTask() {
                     <FontAwesomeIcon icon={faPenToSquare} />
                   </Button>
 
-                  <Button className="m-1" variant="danger" onClick={deleteTask}>
+                  <Button className="m-1" variant="danger" onClick={DeleteTask}>
                     <FontAwesomeIcon icon={faTrash} />
                   </Button>
                 </Card.Body>
@@ -93,11 +96,7 @@ function SingleTask() {
         </Row>
       </Container>
       {openEditModal && (
-        <EditTaskModal
-          data={task}
-          onClose={toggleEditModal}
-          from="single"
-        />
+        <EditTaskModal data={task} onClose={toggleEditModal} from="single" />
       )}
     </div>
   );
@@ -105,6 +104,7 @@ function SingleTask() {
 
 const mapDispatchToProps = {
   getSingleTask,
+  DeleteTask,
 };
 
 const mapStateToProps = (state) => {

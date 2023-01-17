@@ -61,6 +61,15 @@ export default function reducer(state = defaultState, action) {
     }
 
     case actionTypes.DELETE_TASK: {
+      if (action.from === "single") {
+        return {
+          ...state,
+          task: null,
+          loading: false,
+          successMessage: "Task has been deleted successfully!",
+        };
+      }
+
       const newTasks = state.tasks.filter((task) => task._id !== action.taskId);
       return {
         ...state,

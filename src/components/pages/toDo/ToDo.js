@@ -8,7 +8,7 @@ import NewTask from "../../newTask/NewTask";
 import Confirm from "../../Confirm";
 import EditTaskModal from "../../EditTaskModal";
 import { connect } from "react-redux";
-import { getTasks, deleteTask, deleteTasks } from "../../../store/actions";
+import { getTasks, DeleteTask, deleteTasks } from "../../../store/actions";
 import { Button } from "react-bootstrap";
 
 class ToDo extends Component {
@@ -49,8 +49,6 @@ class ToDo extends Component {
     }
   }
 
- 
-
   toggleSelectTask = (taskId) => {
     const selectedTasks = new Set(this.state.selectedTasks);
     if (selectedTasks.has(taskId)) {
@@ -67,12 +65,11 @@ class ToDo extends Component {
   deleteSelectedTasks = () => {
     const { selectedTasks } = this.state;
     this.props.deleteTasks(selectedTasks);
-    
-        this.setState({         
-          selectedTasks: new Set(),
-          showConfirm: false,
-        });
-     
+
+    this.setState({
+      selectedTasks: new Set(),
+      showConfirm: false,
+    });
   };
 
   toggleConfirm = () => {
@@ -170,7 +167,7 @@ class ToDo extends Component {
             data={task}
             selectedData={selectedTasks}
             onToggleSelectTask={this.toggleSelectTask}
-            onDeleteTask={this.props.deleteTask}
+            onDeleteTask={this.props.DeleteTask}
             isSelected={selectedTasks.has(task._id)}
             onEdit={this.handleEdit}
           />
@@ -255,7 +252,7 @@ const mapStateToProps = (state) => {
 
 const mapDispatchToProps = {
   getTasks,
-  deleteTask,
+  DeleteTask,
   deleteTasks,
 };
 
