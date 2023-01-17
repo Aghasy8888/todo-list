@@ -6,6 +6,7 @@ import Col from "react-bootstrap/Col";
 import Task from "../../Task/Task";
 import NewTask from "../../newTask/NewTask";
 import Confirm from "../../Confirm";
+import Search from "../../Search/Search";
 import EditTaskModal from "../../EditTaskModal";
 import { connect } from "react-redux";
 import { getTasks, DeleteTask, deleteTasks } from "../../../store/actions";
@@ -179,6 +180,12 @@ class ToDo extends Component {
         <h2>ToDo List</h2>
 
         <Container>
+          <Row>
+            <Col>
+              <Search />
+            </Col>
+          </Row>
+
           {/*<Row className="justify-content-center">
           <Col xs={10}>
             <NewTask selectedTasks={selectedTasks} onAdd={this.addTask} />
