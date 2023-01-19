@@ -1,5 +1,7 @@
 import React, { useState } from "react";
 import { connect } from "react-redux";
+import { formatDate } from "../../helpers/utils";
+import { getTasks } from "../../store/actions";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import {
@@ -74,7 +76,7 @@ const dateOptions = [
   },
 ];
 
-function Search(props) {
+function Search({ getTasks }) {
   const [status, setStatus] = useState({
     value: "",
   });
@@ -103,10 +105,23 @@ function Search(props) {
   };
 
   const handleSubmit = () => {
-    console.log("status", status);
-    console.log("sort", sort);
-    console.log("search", search);
-    console.log("dates", dates);
+    const searchParams = {};
+
+    search && (searchParams.search = search);
+    sort.value && (searchParams.sort = sort.value);
+    status.value && (searchParams.status = status.value);
+
+    for (let key in dates) {
+      const value = dates[key];
+      if (value) {
+        const date = formatDate(value.toISOString());
+
+        searchParams[key] = date;
+        console.log("date", date);
+      }
+    }
+
+    getTasks(searchParams);
   };
 
   return (
@@ -143,6 +158,7 @@ function Search(props) {
               active={sort.value === option.value}
               key={index}
               onClick={() => setSort(option)}
+              //onMouseUp={handleSubmit}
             >
               {option.label}
             </Dropdown.Item>
@@ -153,19 +169,22 @@ function Search(props) {
           Search
         </Button>
       </InputGroup>
-      <div> 
-      {dateOptions.map((option) => (        
-        
+
+      {dateOptions.map((option, index) => (
+        <div key={index}>
           <span>{option.label}</span>
           <DatePicker
             selected={dates[option.value]}
             onChange={(value) => handleChangeDate(value, option.value)}
           />
-        
+        </div>
       ))}
-      </div>
     </div>
   );
 }
 
-export default connect()(Search);
+const mapDispatchToProps = {
+  getTasks,
+};
+
+export default connect(null, mapDispatchToProps)(Search);

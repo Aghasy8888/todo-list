@@ -20,6 +20,7 @@ export default function reducer(state = defaultState, action) {
         addTaskSuccess: false,
         deleteTasksSuccess: false,
         editTasksSuccess: false,
+        editSingleTaskSuccess: false,
         loading: true,
         successMessage: null,
         errorMessage: null,

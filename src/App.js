@@ -13,34 +13,25 @@ import { connect } from "react-redux";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
+const toastProps = {
+  position: "bottom-left",
+  autoClose: 5000,
+  hideProgressBar: false,
+  closeOnClick: true,
+  pauseOnHover: true,
+  draggable: true,
+  theme: "light",
+};
 
-//import Conditional from "./demo/conditional/Conditional";
 function App({ loading, successMessage, errorMessage }) {
   useEffect(() => {
     if (successMessage) {
-      toast.success(successMessage, {
-        position: "bottom-left",
-        autoClose: 5000,
-        hideProgressBar: false,
-        closeOnClick: true,
-        pauseOnHover: true,
-        draggable: true,       
-        theme: "light",
-      });
+      toast.success(successMessage, toastProps);
     }
 
     if (errorMessage) {
-      toast.error(errorMessage, {
-        position: "bottom-left",
-        autoClose: 5000,
-        hideProgressBar: false,
-        closeOnClick: true,
-        pauseOnHover: true,
-        draggable: true,       
-        theme: "light",
-      });
+      toast.error(errorMessage, toastProps);
     }
-
   }, [successMessage, errorMessage]);
 
   return (

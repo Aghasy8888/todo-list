@@ -96,7 +96,7 @@ function SingleTask(props) {
         </Row>
       </Container>
       {openEditModal && (
-        <EditTaskModal data={task} onClose={toggleEditModal} from="single" />
+        <EditTaskModal data={task} onClose={toggleEditModal} onToggleEditModal={toggleEditModal} from="single" />
       )}
     </div>
   );

@@ -37,7 +37,7 @@ class EditTaskModal extends PureComponent {
     }
   };
 
-  addTask = () => {
+  handleSave = () => {
     const title = this.state.title.trim();
     const description = this.state.description.trim();
 
@@ -50,9 +50,10 @@ class EditTaskModal extends PureComponent {
       description,
       _id: this.state._id,
       date: formatDate(this.state.date.toISOString()),
-    }
+    };
 
     this.props.editTask(editedTask, this.props.from);
+    this.props.onToggleEditModal();
   };
 
   getDateValue = (value) => {
@@ -102,7 +103,7 @@ class EditTaskModal extends PureComponent {
           />
         </Modal.Body>
         <Modal.Footer>
-          <Button onClick={this.addTask} variant="success">
+          <Button onClick={this.handleSave} variant="success">
             Save Changes
           </Button>
           <Button onClick={onClose}>Cancel</Button>
