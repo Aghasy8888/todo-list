@@ -97,13 +97,24 @@ export default function reducer(state = defaultState, action) {
     }
 
     case actionTypes.EDIT_TASK: {
+      let successMessage = "Task has been edited successfully!";     
+
+      if(action.status) {
+        if(action.status==="done"){
+          successMessage = "Congrats, you have completed this task!"
+        }
+        else {
+          successMessage = "This task is active now."
+        }
+      }
+
       if (action.from === "single") {
         return {
           ...state,
           task: action.editedTask,
           editSingleTaskSuccess: true,
           loading: false,
-          successMessage: "Task has been edited successfully!",
+          successMessage: successMessage,
         };
       }
 
@@ -118,7 +129,7 @@ export default function reducer(state = defaultState, action) {
         tasks,
         editTasksSuccess: true,
         loading: false,
-        successMessage: "Task has been edited successfully!",
+        successMessage: successMessage,
       };
     }
     default:
