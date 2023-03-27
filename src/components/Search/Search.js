@@ -1,6 +1,5 @@
 import React, { useState } from "react";
 import { connect } from "react-redux";
-import { formatDate } from "../../helpers/utils";
 import { getTasks } from "../../store/actions";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
@@ -11,6 +10,7 @@ import {
   DropdownButton,
   Dropdown,
 } from "react-bootstrap";
+// import { useNavigate } from "react-router";
 
 const statusOptions = [
   {
@@ -114,7 +114,7 @@ function Search({ getTasks }) {
     for (let key in dates) {
       const value = dates[key];
       if (value) {
-        const date = formatDate(value.toISOString());
+        const date = value.toLocaleDateString();
 
         searchParams[key] = date;
         console.log("date", date);

@@ -1,17 +1,20 @@
 import React, { useEffect } from "react";
+import { connect } from "react-redux";
+import { ToastContainer, toast } from "react-toastify";
+import { BrowserRouter, Routes, Navigate, Route } from "react-router-dom";
+import "react-toastify/dist/ReactToastify.css";
 import "./App.css";
-import ToDo from "./components/pages/toDo/ToDo";
 import "bootstrap/dist/css/bootstrap.min.css";
-import { BrowserRouter, Route, Routes, Navigate } from "react-router-dom";
+import ToDo from "./components/pages/toDo/ToDo";
 import About from "./components/pages/about/About";
 import Contact from "./components/pages/contact/Contact";
 import NotFound from "./components/pages/notFound/NotFound";
 import NavMenu from "./components/pages/NavMenu/NavMenu";
 import SingleTask from "./components/pages/SIngleTask/SingleTask";
 import Spinner from "./components/Spinner/Spinner";
-import { connect } from "react-redux";
-import { ToastContainer, toast } from "react-toastify";
-import "react-toastify/dist/ReactToastify.css";
+import Register from "./components/pages/Register/Register";
+import Login from "./components/pages/Login/Login";
+import AuthRoute from "./components/AuthRoute";
 
 const toastProps = {
   position: "bottom-left",
@@ -36,22 +39,37 @@ function App({ loading, successMessage, errorMessage }) {
 
   return (
     <div className="App">
-      {/*<ToDo />*/}
-
-      <BrowserRouter>
+      {/* <Route path="/task/:taskId" element={<SingleTask />} />*/}
+      {/*try to enter this page without loggin' in*/}
+            <BrowserRouter>
         <NavMenu />
         <Routes>
+        <Route path="/" element={<AuthRoute type="private" />} >
           <Route path="/" element={<ToDo />} />
-          <Route path="/home" element={<ToDo />} />
+          <Route path="/home" element={<ToDo />}/>
+          <Route path="/task/:taskId" element={<SingleTask />} /> 
+        </Route>
+
+      <Route element={<AuthRoute type="public" />} >
+      <Route path="/register" element={<Register />}/>
+      <Route path="/login" element={<Login />} />
+      </Route>
+
+        
+
           <Route path="/about" element={<About />} />
           <Route path="/contact" element={<Contact />} />
           <Route path="/not-found" element={<NotFound />} />
-          <Route path="/task/:taskId" element={<SingleTask />} />
+                   
+          
           <Route path="*" element={<Navigate to="/not-found" replace />} />
         </Routes>
       </BrowserRouter>
       {loading && <Spinner />}
-      <ToastContainer />
+      <ToastContainer /> 
+      {/*<ToDo />*/}
+
+
     </div>
   );
 }

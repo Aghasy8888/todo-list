@@ -1,0 +1,30 @@
+.container {
+    display: grid;
+    width: 250px;
+    height: 250px;
+    background-color: aqua;
+    margin: auto;
+    margin-top: 13%;
+    grid-template-columns: 1fr 1fr 1fr;
+    grid-template-rows: 1fr 1fr 1fr;
+}
+
+.items {
+    background-color: aqua;
+    border: 1px solid purple;
+    text-align: center;
+    padding-top: 35%;
+}
+
+span {
+    margin: auto;
+    margin-top: 10px;
+    background-color: rgb(28, 237, 28);    
+    width: 40%;
+    text-align: center;
+}
+
+.whosTurn {
+    background-color: darkorange; 
+}
+

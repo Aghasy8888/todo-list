@@ -1,4 +1,5 @@
-import * as actionTypes from "./actionTypes";
+import * as actionTypes from './actionTypes';
+import { checkLoginStatus } from '../helpers/auth';
 
 const defaultState = {
   tasks: [],
@@ -10,6 +11,7 @@ const defaultState = {
   loading: false,
   successMessage: null,
   errorMessage: null,
+  isAuthenticated: checkLoginStatus(),
 };
 
 export default function reducer(state = defaultState, action) {
@@ -57,17 +59,17 @@ export default function reducer(state = defaultState, action) {
         tasks: [...state.tasks, action.task],
         addTaskSuccess: true,
         loading: false,
-        successMessage: "Task has been created successfully!",
+        successMessage: 'Task has been created successfully!',
       };
     }
 
     case actionTypes.DELETE_TASK: {
-      if (action.from === "single") {
+      if (action.from === 'single') {
         return {
           ...state,
           task: null,
           loading: false,
-          successMessage: "Task has been deleted successfully!",
+          successMessage: 'Task has been deleted successfully!',
         };
       }
 
@@ -76,7 +78,7 @@ export default function reducer(state = defaultState, action) {
         ...state,
         tasks: newTasks,
         loading: false,
-        successMessage: "Task has been deleted successfully!",
+        successMessage: 'Task has been deleted successfully!',
       };
     }
 
@@ -92,23 +94,22 @@ export default function reducer(state = defaultState, action) {
         tasks: newTasks,
         deleteTasksSuccess: true,
         loading: false,
-        successMessage: "Tasks has been deleted successfully!",
+        successMessage: 'Tasks has been deleted successfully!',
       };
     }
 
     case actionTypes.EDIT_TASK: {
-      let successMessage = "Task has been edited successfully!";     
+      let successMessage = 'Task has been edited successfully!';
 
-      if(action.status) {
-        if(action.status==="done"){
-          successMessage = "Congrats, you have completed this task!"
-        }
-        else {
-          successMessage = "This task is active now."
+      if (action.status) {
+        if (action.status === 'done') {
+          successMessage = 'Congrats, you have completed this task!';
+        } else {
+          successMessage = 'This task is active now.';
         }
       }
 
-      if (action.from === "single") {
+      if (action.from === 'single') {
         return {
           ...state,
           task: action.editedTask,
@@ -132,6 +133,42 @@ export default function reducer(state = defaultState, action) {
         successMessage: successMessage,
       };
     }
+
+    case actionTypes.REGISTER_SUCCESS: {
+      return {
+        ...state,
+        loading: false,
+        successMessage: 'Congrats, you have been registered successfully!',
+      };
+    }
+
+    case actionTypes.LOGIN_SUCCESS: {
+      return {
+        ...state,
+        loading: false,
+        isAuthenticated: true,
+      };
+    }
+
+    case actionTypes.LOGOUT_SUCCESS: {
+      return {
+        ...state,
+        loading: false,
+        isAuthenticated: false,
+      };
+    }
+
+    case actionTypes.AUTH_LOADING:
+      return { ...state, loading: true, successMessage: null, error: null };
+
+    case actionTypes.AUTH_ERROR: {
+      return {
+        ...state,
+        loading: false,
+        error: action.error,
+      };
+    }
+
     default:
       return state;
   }

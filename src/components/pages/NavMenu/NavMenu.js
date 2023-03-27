@@ -1,32 +1,76 @@
-import React from "react";
-import Nav from "react-bootstrap/Container";
-import Navbar from "react-bootstrap/Navbar";
-import { NavLink } from "react-router-dom";
-import styles from "./navMenuStyle.module.css";
+import React from 'react';
+import { Button, Navbar, Nav } from 'react-bootstrap';
+import { NavLink, useNavigate } from 'react-router-dom';
+import styles from './navMenuStyle.module.css';
+import { connect } from 'react-redux';
+import { logout } from '../../../store/actions';
 
-export default function NavMenu() {
+function NavMenu({ isAuthenticated, logout }) {
+  const navigate = useNavigate();
+  const handleLogout = () => {
+    logout(navigate);
+  };
+
   return (
-    <Navbar expand="lg" variant="light" bg="light">
-      <Nav className="mr-auto">
+    <Navbar expand='lg' variant='light' bg='light'>
+      <Nav className='mr-auto'>
+        {isAuthenticated && (
+          <NavLink
+            className={({ isActive }) => (isActive ? styles.active : undefined)}
+            to='/'
+          >
+            Home
+          </NavLink>
+        )}
+
         <NavLink
           className={({ isActive }) => (isActive ? styles.active : undefined)}
-          to="/"
-        >
-          Home
-        </NavLink>
-        <NavLink
-          className={({ isActive }) => (isActive ? styles.active : undefined)}
-          to="/about"
+          to='/about'
         >
           About Us
         </NavLink>
         <NavLink
           className={({ isActive }) => (isActive ? styles.active : undefined)}
-          to="/contact"
+          to='/contact'
         >
           Contact Us
         </NavLink>
+
+        {isAuthenticated ? (
+          <Button onClick={handleLogout}>Log Out</Button>
+        ) : (
+          <>
+            <NavLink
+              className={({ isActive }) =>
+                isActive ? styles.active : undefined
+              }
+              to='/login'
+            >
+              Login
+            </NavLink>
+            <NavLink
+              className={({ isActive }) =>
+                isActive ? styles.active : undefined
+              }
+              to='/register'
+            >
+              Register
+            </NavLink>
+          </>
+        )}
       </Nav>
     </Navbar>
   );
 }
+
+const mapStateToProps = (state) => {
+  return {
+    isAuthenticated: state.isAuthenticated,
+  };
+};
+
+const mapDispatchToProps = {
+  logout,
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(NavMenu);

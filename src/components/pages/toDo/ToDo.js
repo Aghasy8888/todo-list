@@ -1,23 +1,23 @@
-import React, { Component } from "react";
+import React, { Component } from 'react';
 //import styles from "./style.module.css";
-import Container from "react-bootstrap/Container";
-import Row from "react-bootstrap/Row";
-import Col from "react-bootstrap/Col";
-import Task from "../../Task/Task";
-import NewTask from "../../newTask/NewTask";
-import Confirm from "../../Confirm";
-import Search from "../../Search/Search";
-import EditTaskModal from "../../EditTaskModal";
-import { connect } from "react-redux";
-import { getTasks, DeleteTask, deleteTasks } from "../../../store/actions";
-import { Button } from "react-bootstrap";
+import Container from 'react-bootstrap/Container';
+import Row from 'react-bootstrap/Row';
+import Col from 'react-bootstrap/Col';
+import Task from '../../Task/Task';
+import NewTask from '../../newTask/NewTask';
+import Confirm from '../../Confirm';
+import Search from '../../Search/Search';
+import EditTaskModal from '../../EditTaskModal';
+import { connect } from 'react-redux';
+import { getTasks, deleteTask, deleteTasks } from '../../../store/actions';
+import { Button } from 'react-bootstrap';
 
 class ToDo extends Component {
   state = {
     //tasks: [],
     selectedTasks: new Set(),
     showConfirm: false,
-    selectButtonStatus: "Select All",
+    selectButtonStatus: 'Select All',
     isOpenNewTaskModal: false,
     editTask: null,
   };
@@ -81,8 +81,8 @@ class ToDo extends Component {
 
   toggleSelectAll = () => {
     const { tasks, selectButtonStatus } = this.state;
-    const buttonNameSelectAll = "Select All";
-    const buttonNameDeselectAll = "Deselect All";
+    const buttonNameSelectAll = 'Select All';
+    const buttonNameDeselectAll = 'Deselect All';
 
     if (selectButtonStatus === buttonNameSelectAll) {
       this.setState({
@@ -119,10 +119,10 @@ class ToDo extends Component {
   };
 
   handleSaveTask = (editedTask) => {
-    fetch("http://localhost:3001/task/" + editedTask._id, {
-      method: "PUT",
+    fetch('http://localhost:3001/task/' + editedTask._id, {
+      method: 'PUT',
       headers: {
-        "content-Type": "application/json",
+        'content-Type': 'application/json',
       },
       body: JSON.stringify(editedTask),
     })
@@ -133,7 +133,7 @@ class ToDo extends Component {
           if (res.error) {
             throw res.error;
           } else {
-            throw new Error("Something went wrong");
+            throw new Error('Something went wrong');
           }
         }
         const tasks = [...this.state.tasks];
@@ -147,7 +147,7 @@ class ToDo extends Component {
         });
       })
       .catch((error) => {
-        console.log("error catching bremn jan.", error);
+        console.log('error catching bremn jan.', error);
       });
   };
 
@@ -168,7 +168,7 @@ class ToDo extends Component {
             data={task}
             selectedData={selectedTasks}
             onToggleSelectTask={this.toggleSelectTask}
-            onDeleteTask={this.props.DeleteTask}
+            onDeleteTask={this.props.deleteTask}
             isSelected={selectedTasks.has(task._id)}
             onEdit={this.handleEdit}
           />
@@ -191,22 +191,22 @@ class ToDo extends Component {
             <NewTask selectedTasks={selectedTasks} onAdd={this.addTask} />
           </Col>
     </Row>*/}
-          <Row xs={3} className="justify-content-center">
+          <Row xs={3} className='justify-content-center'>
             <Col>
-              <Button variant="primary" onClick={this.toggleNewTaskModal}>
+              <Button variant='primary' onClick={this.toggleNewTaskModal}>
                 Add New Task
               </Button>
             </Col>
 
             <Col>
-              <Button variant="warning" onClick={this.toggleSelectAll}>
+              <Button variant='warning' onClick={this.toggleSelectAll}>
                 {selectButtonStatus}
               </Button>
             </Col>
 
             <Col>
               <Button
-                variant="danger"
+                variant='danger'
                 onClick={this.toggleConfirm}
                 disabled={selectedTasks.size === 0}
               >
@@ -259,7 +259,7 @@ const mapStateToProps = (state) => {
 
 const mapDispatchToProps = {
   getTasks,
-  DeleteTask,
+  deleteTask,
   deleteTasks,
 };
 

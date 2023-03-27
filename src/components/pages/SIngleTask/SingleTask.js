@@ -5,7 +5,7 @@ import { Card, Button, Container, Row, Col } from "react-bootstrap";
 import { formatDate } from "../../../helpers/utils";
 import EditTaskModal from "../../EditTaskModal";
 import { useParams } from "react-router";
-import { getSingleTask, DeleteTask } from "../../../store/actions";
+import { getSingleTask, deleteTask } from "../../../store/actions";
 import { connect } from "react-redux";
 import { useNavigate } from "react-router-dom";
 
@@ -27,7 +27,7 @@ function SingleTask(props) {
   const DeleteTask = () => {
     const navigate = useNavigate();
     const taskId = params.taskId;
-    props.DeleteTask(taskId, "single");
+    props.deleteTask(taskId, "single", navigate);
     navigate("/");
     // fetch("http://localhost:3001/task/" + taskId, {
     //   method: "DELETE",
@@ -104,7 +104,7 @@ function SingleTask(props) {
 
 const mapDispatchToProps = {
   getSingleTask,
-  DeleteTask,
+  deleteTask,
 };
 
 const mapStateToProps = (state) => {
