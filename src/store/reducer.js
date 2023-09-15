@@ -12,6 +12,7 @@ const defaultState = {
   successMessage: null,
   errorMessage: null,
   isAuthenticated: checkLoginStatus(),
+  navigate: null,
 };
 
 export default function reducer(state = defaultState, action) {
@@ -168,6 +169,14 @@ export default function reducer(state = defaultState, action) {
         error: action.error,
       };
     }
+
+    case actionTypes.CREATE_NAVIGATOR: {
+      return {
+        ...state,
+        navigate: action.payload.navigate, 
+      };
+    }
+    
 
     default:
       return state;

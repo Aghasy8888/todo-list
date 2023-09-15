@@ -1,7 +1,6 @@
 import decode from 'jwt-decode';
 import { store } from '../store/store';
 import { LOGOUT_SUCCESS } from '../store/actionTypes';
-import { history } from './history';
 
 export default function requestWithoutToken(url, method = 'GET', body) {
   const config = {
@@ -14,10 +13,9 @@ export default function requestWithoutToken(url, method = 'GET', body) {
   if (body) {
     config.body = JSON.stringify(body);
   }
-
+  
   return fetch(url, config).then(async (response) => {
     const res = await response.json();
-    //   console.log('res', res)
 
     if (response.status >= 400 && response.status < 600) {
       if (res.error) {
@@ -26,12 +24,11 @@ export default function requestWithoutToken(url, method = 'GET', body) {
         throw new Error('Something went wrong');
       }
     }
-    console.log('res 555', res);
     return res;
   });
 }
 
-export const getToken = () => {
+export const getToken = (navigate) => {
   const token = localStorage.getItem('token');
 
   if (token) {
@@ -54,11 +51,11 @@ export const getToken = () => {
           return token.jwt;
         })
         .catch(() => {
-          logout();
+          logout(navigate);
         });
     }
   } else {
-    logout();
+    logout(navigate);
   }
 };
 
@@ -66,10 +63,10 @@ export function saveToken(token) {
   localStorage.setItem('token', JSON.stringify(token));
 }
 
-export function logout() {
+export function logout(navigate) {
   localStorage.removeItem('token');
   store.dispatch({ type: LOGOUT_SUCCESS });
-  history.push('/login');
+  navigate('/login');
 }
 
 export function checkLoginStatus() {

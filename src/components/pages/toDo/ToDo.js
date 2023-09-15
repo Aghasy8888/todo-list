@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-//import styles from "./style.module.css";
 import Container from 'react-bootstrap/Container';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
@@ -12,9 +11,9 @@ import { connect } from 'react-redux';
 import { getTasks, deleteTask, deleteTasks } from '../../../store/actions';
 import { Button } from 'react-bootstrap';
 
+
 class ToDo extends Component {
   state = {
-    //tasks: [],
     selectedTasks: new Set(),
     showConfirm: false,
     selectButtonStatus: 'Select All',
@@ -22,8 +21,9 @@ class ToDo extends Component {
     editTask: null,
   };
 
+
   componentDidMount() {
-    this.props.getTasks();
+    this.props.getTasks(this.props.navigate);
   }
 
   componentDidUpdate(prevProps) {
@@ -65,7 +65,8 @@ class ToDo extends Component {
 
   deleteSelectedTasks = () => {
     const { selectedTasks } = this.state;
-    this.props.deleteTasks(selectedTasks);
+    const {deleteTasks, navigate} = this.props
+    deleteTasks(navigate,selectedTasks);
 
     this.setState({
       selectedTasks: new Set(),
@@ -147,11 +148,11 @@ class ToDo extends Component {
         });
       })
       .catch((error) => {
-        console.log('error catching bremn jan.', error);
+        console.log('error catching axper jan.', error);
       });
   };
 
-  render() {
+  render() {    
     const {
       isOpenNewTaskModal,
       selectedTasks,
@@ -159,16 +160,17 @@ class ToDo extends Component {
       selectButtonStatus,
       editTask,
     } = this.state;
-    const { tasks } = this.props;
+    const { tasks, deleteTask } = this.props;
 
     const taskComponents = tasks.map((task) => {
       return (
+       
         <Col key={task._id} xs={6} sm={4} md={3} lg={2} xl={2}>
           <Task
             data={task}
             selectedData={selectedTasks}
             onToggleSelectTask={this.toggleSelectTask}
-            onDeleteTask={this.props.deleteTask}
+            onDeleteTask={deleteTask}
             isSelected={selectedTasks.has(task._id)}
             onEdit={this.handleEdit}
           />
@@ -178,7 +180,7 @@ class ToDo extends Component {
     return (
       <div>
         <h2>ToDo List</h2>
-
+        
         <Container>
           <Row>
             <Col>
@@ -230,7 +232,6 @@ class ToDo extends Component {
           <EditTaskModal
             data={editTask}
             onClose={() => this.handleEdit(null)}
-            //onSave={this.handleSaveTask}
           />
         )}
       </div>
@@ -240,22 +241,13 @@ class ToDo extends Component {
 
 const mapStateToProps = (state) => {
   return {
+    navigate: state.navigate,
     tasks: state.tasks,
     addTaskSuccess: state.addTaskSuccess,
     deleteTasksSuccess: state.deleteTasksSuccess,
     editTasksSuccess: state.editTasksSuccess,
   };
 };
-
-// const mapDispatchToProps = (dispatch) => {
-//   return {
-//     getTasks: (dispatch) {
-//       request("http://localhost:3001/task").then((tasks) => {
-//         dispatch({ type: "GET_TASKS", tasks: tasks });
-//       });
-//     }
-//   }
-// };
 
 const mapDispatchToProps = {
   getTasks,

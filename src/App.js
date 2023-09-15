@@ -59,15 +59,14 @@ function App({ loading, successMessage, errorMessage }) {
 
           <Route path="/about" element={<About />} />
           <Route path="/contact" element={<Contact />} />
-          <Route path="/not-found" element={<NotFound />} />
-                   
+          <Route path="/not-found" element={<NotFound />} />        
           
           <Route path="*" element={<Navigate to="/not-found" replace />} />
         </Routes>
       </BrowserRouter>
       {loading && <Spinner />}
       <ToastContainer /> 
-      {/*<ToDo />*/}
+     
 
 
     </div>

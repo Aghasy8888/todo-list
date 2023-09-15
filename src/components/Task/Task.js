@@ -28,8 +28,15 @@ class Task extends PureComponent {
   };
 
   render() {
-    const { data, selectedData, isSelected, onEdit, editTask } = this.props;
-    const { onDeleteTask } = this.props;
+    const {
+      data,
+      selectedData,
+      isSelected,
+      onEdit,
+      editTask,
+      navigate,
+      onDeleteTask,
+    } = this.props;
     const task = data;
     const selectedTasks = selectedData;
 
@@ -59,7 +66,7 @@ class Task extends PureComponent {
             <Button
               className="m-1"
               variant="success"
-              onClick={() => editTask({ status: "done", _id: task._id })}
+              onClick={() => editTask(navigate, { status: "done", _id: task._id })}
               disabled={selectedTasks.size !== 0}
             >
               <FontAwesomeIcon icon={faCheck} />
@@ -68,7 +75,7 @@ class Task extends PureComponent {
             <Button
               className="m-1"
               variant="secondary"
-              onClick={() => editTask({ status: "active", _id: task._id })}
+              onClick={() => editTask(navigate, { status: "active", _id: task._id })}
               disabled={selectedTasks.size !== 0}
             >
               <FontAwesomeIcon icon={faRedo} />
@@ -87,7 +94,7 @@ class Task extends PureComponent {
           <Button
             className="m-1"
             variant="danger"
-            onClick={() => onDeleteTask(task._id)}
+            onClick={() => onDeleteTask(task._id, undefined, navigate)}
             disabled={selectedTasks.size !== 0}
           >
             <FontAwesomeIcon icon={faTrash} />
@@ -98,8 +105,14 @@ class Task extends PureComponent {
   }
 }
 
+const mapStateToProps = (state) => {
+  return {
+    navigate: state.navigate,
+  };
+};
+
 const mapDispatchToProps = {
   editTask,
 };
 
-export default connect(null, mapDispatchToProps)(Task);
+export default connect(mapStateToProps, mapDispatchToProps)(Task);

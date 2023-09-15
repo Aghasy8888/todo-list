@@ -10,6 +10,7 @@ import {
   DropdownButton,
   Dropdown,
 } from "react-bootstrap";
+import { useNavigate } from "react-router";
 // import { useNavigate } from "react-router";
 
 const statusOptions = [
@@ -77,6 +78,7 @@ const dateOptions = [
 ];
 
 function Search({ getTasks }) {
+  const navigate = useNavigate();
   const [status, setStatus] = useState({
     value: "",
   });
@@ -117,11 +119,10 @@ function Search({ getTasks }) {
         const date = value.toLocaleDateString();
 
         searchParams[key] = date;
-        console.log("date", date);
       }
     }
 
-    getTasks(searchParams);
+    getTasks(navigate, searchParams);
   };
 
   return (
@@ -183,8 +184,14 @@ function Search({ getTasks }) {
   );
 }
 
+const mapStateToProps = (state) => {
+  return {
+    navigate: state.navigate
+  }
+}
+
 const mapDispatchToProps = {
   getTasks,
 };
 
-export default connect(null, mapDispatchToProps)(Search);
+export default connect(mapStateToProps, mapDispatchToProps)(Search);

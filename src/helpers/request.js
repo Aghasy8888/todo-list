@@ -1,7 +1,7 @@
 import { getToken } from "./auth";
 
-export default async function request(url, method = "GET", body) {
-  const token = await getToken();
+export default async function request(navigate, url, method = "GET", body) {
+  const token = await getToken(navigate);
 
   if(!token) return Promise.resolve(null);
 
@@ -19,7 +19,6 @@ export default async function request(url, method = "GET", body) {
 
   return fetch(url, config).then(async (response) => {
     const res = await response.json();
-    //   console.log('res', res)
 
     if (response.status >= 400 && response.status < 600) {
       if (res.error) {
@@ -28,7 +27,6 @@ export default async function request(url, method = "GET", body) {
         throw new Error("Something went wrong");
       }
     }
-    console.log("res 555", res);
     return res;
   });
 }

@@ -72,8 +72,6 @@ export default function Contact() {
             }
           }
 
-          console.log("Form was sent successfully");
-
           setValues({
             name: "",
             email: "",
@@ -81,7 +79,7 @@ export default function Contact() {
           });
         })
         .catch((error) => {
-          console.log("error catching bremn jan.", error);
+          console.log("error catching axper jan.", error);
         });
 
       return;

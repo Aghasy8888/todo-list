@@ -38,6 +38,7 @@ class EditTaskModal extends PureComponent {
   };
 
   handleSave = () => {
+    const { editTask, from, onToggleEditModal, navigate } = this.props;
     const title = this.state.title.trim();
     const description = this.state.description.trim();
 
@@ -52,8 +53,10 @@ class EditTaskModal extends PureComponent {
       date: formatDate(this.state.date.toISOString()),
     };
 
-    this.props.editTask(editedTask, this.props.from);
-    this.props.onToggleEditModal();
+    editTask(navigate, editedTask, from);
+    if (onToggleEditModal) {
+      onToggleEditModal();
+    }
   };
 
   getDateValue = (value) => {
@@ -113,8 +116,14 @@ class EditTaskModal extends PureComponent {
   }
 }
 
+const mapStateToProps = (state) => {
+  return {
+    navigate: state.navigate,
+  };
+};
+
 const mapDispatchToProps = {
   editTask,
 };
 
-export default connect(null, mapDispatchToProps)(EditTaskModal);
+export default connect(mapStateToProps, mapDispatchToProps)(EditTaskModal);

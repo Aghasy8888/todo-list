@@ -28,11 +28,11 @@ class NewTask extends PureComponent {
 
   addTaskWithEnter = (event) => {
     if (event.key === "Enter") {
-      this.handleSave();
+      this.handleSave(this.props.navigate);
     }
   };
 
-  handleSave = () => {
+  handleSave = (navigate) => {
     const title = this.state.title.trim();
     const description = this.state.description.trim();
     const { date } = this.state;
@@ -41,20 +41,18 @@ class NewTask extends PureComponent {
       return;
     }
 
-    console.log(2, date);
     const newTask = {
       title,
       description,
       date: formatDate(date.toISOString()),
     };
-    this.props.addTask(newTask);
+    this.props.addTask(navigate, newTask);
   };
 
   getDateValue = (value) => {
     this.setState({
       date: value || new Date(),
     });
-    console.log(value, "000000");
   };
 
   render() {
@@ -95,7 +93,7 @@ class NewTask extends PureComponent {
           />
         </Modal.Body>
         <Modal.Footer>
-          <Button onClick={this.handleSave} variant="success">
+          <Button onClick={() => this.handleSave(this.props.navigate)} variant="success">
             Add
           </Button>
           <Button onClick={onClose}>Cancel</Button>
@@ -105,8 +103,14 @@ class NewTask extends PureComponent {
   }
 }
 
+const mapStateToProps = (state) => {
+  return {
+    navigate: state.navigate
+  }
+}
+
 const mapDispatchToProps = {
   addTask,
 };
 
-export default connect(null, mapDispatchToProps)(NewTask);
+export default connect(mapStateToProps, mapDispatchToProps)(NewTask);

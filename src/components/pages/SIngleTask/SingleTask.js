@@ -10,6 +10,7 @@ import { connect } from "react-redux";
 import { useNavigate } from "react-router-dom";
 
 function SingleTask(props) {
+  const navigate = useNavigate();
   const [values, setValues] = useState({
     openEditModal: false,
   });
@@ -21,36 +22,36 @@ function SingleTask(props) {
 
   useEffect(() => {
     const taskId = params.taskId;
-    props.getSingleTask(taskId);
+    props.getSingleTask(navigate, taskId);
   }, []);
 
   const DeleteTask = () => {
-    const navigate = useNavigate();
+    
     const taskId = params.taskId;
     props.deleteTask(taskId, "single", navigate);
-    navigate("/");
-    // fetch("http://localhost:3001/task/" + taskId, {
-    //   method: "DELETE",
-    //   headers: {
-    //     "content-Type": "application/json",
-    //   },
-    // })
-    //   .then(async (response) => {
-    //     const res = await response.json();
+    
+    fetch("http://localhost:3001/task/" + taskId, {
+      method: "DELETE",
+      headers: {
+        "content-Type": "application/json",
+      },
+    })
+      .then(async (response) => {
+        const res = await response.json();
 
-    //     if (response.status >= 400 && response.status < 600) {
-    //       if (res.error) {
-    //         throw res.error;
-    //       } else {
-    //         throw new Error("Something went wrong");
-    //       }
-    //     }
+        if (response.status >= 400 && response.status < 600) {
+          if (res.error) {
+            throw res.error;
+          } else {
+            throw new Error("Something went wrong");
+          }
+        }
 
-    //     history("/");
-    //   })
-    //   .catch((error) => {
-    //     console.log("error catching bremn jan.", error);
-    //   });
+        navigate("/");
+      })
+      .catch((error) => {
+        console.log("error catching axper jan.", error);
+      });
   };
 
   const toggleEditModal = () => {

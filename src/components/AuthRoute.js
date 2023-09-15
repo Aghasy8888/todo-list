@@ -1,6 +1,6 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import { Route, Navigate, Outlet } from 'react-router-dom';
+import { Navigate, Outlet } from 'react-router-dom';
 
 function AuthRoute({ path, element: Element, isAuthenticated, type }) {
   if (isAuthenticated && type === 'public') {

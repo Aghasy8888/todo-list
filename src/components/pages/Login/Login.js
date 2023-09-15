@@ -1,12 +1,22 @@
 import React, { useState } from "react";
 import { Form, Button, Container, Row, Col } from "react-bootstrap";
-import { connect } from "react-redux";
-import { login } from "../../../store/actions";
+import { connect, useDispatch } from "react-redux";
+import { createNavigatorAction, login } from "../../../store/actions";
 import styles from "./loginStyle.module.css";
 import { Link, useNavigate } from "react-router-dom";
 
 function Login(props) {
   const navigate = useNavigate();
+  const dispatch = useDispatch();
+
+  React.useEffect(() => {
+    const navigatorFunction = (path) => {
+      navigate(path);
+    };
+
+    dispatch(createNavigatorAction(navigatorFunction));
+  }, [dispatch, navigate]);
+
   const [values, setValues] = useState({
     email: "",
     password: "",
@@ -26,7 +36,6 @@ function Login(props) {
     });
 
     if (email && password) {
-      console.log(values);
       props.login(values, navigate);
     }
   };
