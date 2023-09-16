@@ -2,3 +2,12 @@
     color: blueviolet;
 }
 
+.title {
+    margin: 20px 80px;
+    min-width: 105px;
+}
+
+.taskBtn {
+    margin-top: 20px;
+}
+

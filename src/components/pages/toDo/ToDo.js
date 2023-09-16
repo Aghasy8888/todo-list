@@ -1,26 +1,27 @@
-import React, { Component } from 'react';
-import Container from 'react-bootstrap/Container';
-import Row from 'react-bootstrap/Row';
-import Col from 'react-bootstrap/Col';
-import Task from '../../Task/Task';
-import NewTask from '../../newTask/NewTask';
-import Confirm from '../../Confirm';
-import Search from '../../Search/Search';
-import EditTaskModal from '../../EditTaskModal';
-import { connect } from 'react-redux';
-import { getTasks, deleteTask, deleteTasks } from '../../../store/actions';
-import { Button } from 'react-bootstrap';
+import React, { Component } from "react";
+import Container from "react-bootstrap/Container";
+import Row from "react-bootstrap/Row";
+import Col from "react-bootstrap/Col";
+import Task from "../../Task/Task";
+import NewTask from "../../newTask/NewTask";
+import Confirm from "../../Confirm";
+import Search from "../../Search/Search";
+import EditTaskModal from "../../EditTaskModal";
+import { connect } from "react-redux";
+import { getTasks, deleteTask, deleteTasks } from "../../../store/actions";
+import { Button } from "react-bootstrap";
 
+import styles from "./style.module.css";
 
 class ToDo extends Component {
   state = {
+    tasks: [],
     selectedTasks: new Set(),
     showConfirm: false,
-    selectButtonStatus: 'Select All',
+    selectButtonStatus: "Select All",
     isOpenNewTaskModal: false,
     editTask: null,
   };
-
 
   componentDidMount() {
     this.props.getTasks(this.props.navigate);
@@ -65,8 +66,8 @@ class ToDo extends Component {
 
   deleteSelectedTasks = () => {
     const { selectedTasks } = this.state;
-    const {deleteTasks, navigate} = this.props
-    deleteTasks(navigate,selectedTasks);
+    const { deleteTasks, navigate } = this.props;
+    deleteTasks(navigate, selectedTasks);
 
     this.setState({
       selectedTasks: new Set(),
@@ -81,9 +82,10 @@ class ToDo extends Component {
   };
 
   toggleSelectAll = () => {
-    const { tasks, selectButtonStatus } = this.state;
-    const buttonNameSelectAll = 'Select All';
-    const buttonNameDeselectAll = 'Deselect All';
+    const { selectButtonStatus } = this.state;
+    const {tasks} = this.props;
+    const buttonNameSelectAll = "Select All";
+    const buttonNameDeselectAll = "Deselect All";
 
     if (selectButtonStatus === buttonNameSelectAll) {
       this.setState({
@@ -120,10 +122,10 @@ class ToDo extends Component {
   };
 
   handleSaveTask = (editedTask) => {
-    fetch('http://localhost:3001/task/' + editedTask._id, {
-      method: 'PUT',
+    fetch("http://localhost:3001/task/" + editedTask._id, {
+      method: "PUT",
       headers: {
-        'content-Type': 'application/json',
+        "content-Type": "application/json",
       },
       body: JSON.stringify(editedTask),
     })
@@ -134,7 +136,7 @@ class ToDo extends Component {
           if (res.error) {
             throw res.error;
           } else {
-            throw new Error('Something went wrong');
+            throw new Error("Something went wrong");
           }
         }
         const tasks = [...this.state.tasks];
@@ -148,11 +150,11 @@ class ToDo extends Component {
         });
       })
       .catch((error) => {
-        console.log('error catching axper jan.', error);
+        console.log("error catching axper jan.", error);
       });
   };
 
-  render() {    
+  render() {
     const {
       isOpenNewTaskModal,
       selectedTasks,
@@ -164,7 +166,6 @@ class ToDo extends Component {
 
     const taskComponents = tasks.map((task) => {
       return (
-       
         <Col key={task._id} xs={6} sm={4} md={3} lg={2} xl={2}>
           <Task
             data={task}
@@ -179,8 +180,8 @@ class ToDo extends Component {
     });
     return (
       <div>
-        <h2>ToDo List</h2>
-        
+        <h2 className={styles.title}>ToDo List</h2>
+
         <Container>
           <Row>
             <Col>
@@ -193,22 +194,31 @@ class ToDo extends Component {
             <NewTask selectedTasks={selectedTasks} onAdd={this.addTask} />
           </Col>
     </Row>*/}
-          <Row xs={3} className='justify-content-center'>
+          <Row xs={3} className="justify-content-center">
             <Col>
-              <Button variant='primary' onClick={this.toggleNewTaskModal}>
+              <Button
+                className={styles.taskBtn}
+                variant="primary"
+                onClick={this.toggleNewTaskModal}
+              >
                 Add New Task
               </Button>
             </Col>
 
             <Col>
-              <Button variant='warning' onClick={this.toggleSelectAll}>
+              <Button
+                className={styles.taskBtn}
+                variant="warning"
+                onClick={this.toggleSelectAll}
+              >
                 {selectButtonStatus}
               </Button>
             </Col>
 
             <Col>
               <Button
-                variant='danger'
+                className={styles.taskBtn}
+                variant="danger"
                 onClick={this.toggleConfirm}
                 disabled={selectedTasks.size === 0}
               >

@@ -1,0 +1,21 @@
+.heading {
+    text-align: center;
+}
+
+.formGroup {
+    margin-bottom: 10px;
+}
+
+.linkToRegister {
+    margin-top: 3px;
+    text-align: center;
+}
+
+.loginCtn {
+    display: flex;
+    height: 50vh;
+}
+
+.ctn {
+    margin-top: auto;
+}

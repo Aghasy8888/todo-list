@@ -5,3 +5,16 @@
 .invalid, .invalid:focus {
     border: 1px solid red;
 }
+
+.contactCtn {
+    display: flex;
+    height: 50vh;
+}
+
+.ctn {
+    margin-top: auto;
+}
+
+.formGroup {
+    margin-bottom: 10px;
+}

@@ -1,4 +1,5 @@
 import * as actionTypes from './actionTypes';
+import * as userActionTypes from './userActionTypes';
 import { checkLoginStatus } from '../helpers/auth';
 
 const defaultState = {
@@ -135,7 +136,7 @@ export default function reducer(state = defaultState, action) {
       };
     }
 
-    case actionTypes.REGISTER_SUCCESS: {
+    case userActionTypes.REGISTER_SUCCESS: {
       return {
         ...state,
         loading: false,
@@ -143,7 +144,7 @@ export default function reducer(state = defaultState, action) {
       };
     }
 
-    case actionTypes.LOGIN_SUCCESS: {
+    case userActionTypes.LOGIN_SUCCESS: {
       return {
         ...state,
         loading: false,
@@ -151,7 +152,7 @@ export default function reducer(state = defaultState, action) {
       };
     }
 
-    case actionTypes.LOGOUT_SUCCESS: {
+    case userActionTypes.LOGOUT_SUCCESS: {
       return {
         ...state,
         loading: false,
@@ -159,10 +160,10 @@ export default function reducer(state = defaultState, action) {
       };
     }
 
-    case actionTypes.AUTH_LOADING:
+    case userActionTypes.AUTH_LOADING:
       return { ...state, loading: true, successMessage: null, error: null };
 
-    case actionTypes.AUTH_ERROR: {
+    case userActionTypes.AUTH_ERROR: {
       return {
         ...state,
         loading: false,

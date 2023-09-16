@@ -1,6 +1,6 @@
 import decode from 'jwt-decode';
 import { store } from '../store/store';
-import { LOGOUT_SUCCESS } from '../store/actionTypes';
+import { LOGOUT_SUCCESS } from '../store/userActionTypes';
 
 export default function requestWithoutToken(url, method = 'GET', body) {
   const config = {
@@ -87,7 +87,9 @@ export function getJWT() {
 
 export function getLocalJWT() {
   const token = localStorage.getItem('token');
+  
   if (!token) {
     return null;
   }
+  return JSON.parse(token).jwt;
 }

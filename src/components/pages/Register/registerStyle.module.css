@@ -21,3 +21,12 @@
 .invalid{
     border: 1px solid red;
 }
+
+.formGroup {
+    margin-bottom: 10px;
+}
+
+.linkToLogin {
+    margin-top: 3px;
+    text-align: center;
+}

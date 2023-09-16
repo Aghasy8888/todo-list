@@ -1,9 +1,11 @@
 import React, { useState } from "react";
 import { Form, Button, Container, Row, Col } from "react-bootstrap";
 import { connect, useDispatch } from "react-redux";
-import { createNavigatorAction, login } from "../../../store/actions";
-import styles from "./loginStyle.module.css";
+import { createNavigatorAction } from "../../../store/actions";
+import { login } from "../../../store/userActions";
+
 import { Link, useNavigate } from "react-router-dom";
+import styles from "./loginStyle.module.css";
 
 function Login(props) {
   const navigate = useNavigate();
@@ -52,14 +54,20 @@ function Login(props) {
     });
   };
 
+  const handleKeyDown = (event) => {
+    if (event.key === "Enter") {
+      handleSubmit();
+    }
+  }
+
   return (
-    <div className={styles.main}>
-      <Container>
+    <div className={styles.loginCtn}>
+      <Container className={styles.ctn}>
         <Row className="justify-content-center">
           <Col xs={12} sm={8} md={6}>
             <Form>
               <h3 className={styles.heading}>Login</h3>
-              <Form.Group>
+              <Form.Group className={styles.formGroup}>
                 <Form.Control
                   className={errors.email ? styles.invalid : ""}
                   type="email"
@@ -67,11 +75,12 @@ function Login(props) {
                   placeholder="Enter email"
                   value={values.email}
                   onChange={handleChange}
+                  onKeyDown={(event) => handleKeyDown(event)}
                 />
                 {<Form.Text className="text-danger">{errors.email}</Form.Text>}
               </Form.Group>
 
-              <Form.Group>
+              <Form.Group className={styles.formGroup}>
                 <Form.Control
                   className={errors.password ? styles.invalid : ""}
                   type="password"
@@ -79,6 +88,7 @@ function Login(props) {
                   value={values.password}
                   onChange={handleChange}
                   name="password"
+                  onKeyDown={(event) => handleKeyDown(event)}
                 />
                 {
                   <Form.Text className="text-danger">
@@ -92,7 +102,11 @@ function Login(props) {
                   Login
                 </Button>
               </div>
-              <Link to="/register">Don't have account yet? Register now!</Link>
+              <p className={styles.linkToRegister}>
+                <Link to="/register" >
+                  Don't have account yet? Register now!
+                </Link>
+              </p>
             </Form>
           </Col>
         </Row>

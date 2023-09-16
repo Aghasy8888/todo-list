@@ -94,12 +94,13 @@ export default function Contact() {
     }
   };
   return (
-    <Container>
+    <div className={styles.contactCtn}>
+      <Container className={styles.ctn}>
       <Row className="justify-content-center">
         <Col xs={7}>
           <Form className="mt-5">
             <h2 className="text-center">Contact Us</h2>
-            <Form.Group>
+            <Form.Group className={styles.formGroup}>
               <Form.Control
                 className={errors.name ? styles.invalid : ""}
                 type="text"
@@ -111,7 +112,7 @@ export default function Contact() {
               <Form.Text className="text-danger">{errors.name}</Form.Text>
             </Form.Group>
 
-            <Form.Group>
+            <Form.Group className={styles.formGroup}>
               <Form.Control
                 className={errors.email ? styles.invalid : ""}
                 type="email"
@@ -123,7 +124,7 @@ export default function Contact() {
               <Form.Text className="text-danger">{errors.email}</Form.Text>
             </Form.Group>
 
-            <Form.Group>
+            <Form.Group className={styles.formGroup}>
               <Form.Control
                 className={errors.message ? styles.invalid : ""}
                 as="textarea"
@@ -149,5 +150,7 @@ export default function Contact() {
         </Col>
       </Row>
     </Container>
+    </div>
+    
   );
 }

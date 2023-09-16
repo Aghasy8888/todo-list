@@ -2,7 +2,7 @@ import React from 'react';
 import { connect } from 'react-redux';
 import { Navigate, Outlet } from 'react-router-dom';
 
-function AuthRoute({ path, element: Element, isAuthenticated, type }) {
+function AuthRoute({ isAuthenticated, type }) {
   if (isAuthenticated && type === 'public') {
     return <Navigate to='/' />;
   }
@@ -10,16 +10,6 @@ function AuthRoute({ path, element: Element, isAuthenticated, type }) {
     return <Navigate to='/login' />;
   }
   return <Outlet />;
-  // return (
-  //   <Route
-  //     path={path}
-  //     render={(props) => {
-        
-
-        
-  //     }}
-  //   />
-  // );
 }
 
 const mapStateToProps = (state) => {

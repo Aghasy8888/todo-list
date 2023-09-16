@@ -1,67 +1,64 @@
 import request from '../helpers/request';
 import * as actionTypes from './userActionTypes';
-import {saveJWT,removeJWT, getLocalJWT} from './../helpers/auth';
-import {history} from './../helpers/history';
-import {loginRequest, registerRequest} from '../helpers/auth';
+import requestWithoutToken, {removeJWT, getLocalJWT, saveToken} from './../helpers/auth';
 
 const apiUrl = process.env.REACT_APP_API_URL;
+const apiHost = process.env.REACT_APP_API_HOST;
 
-// export function register(data){
-
-//     return (dispatch)=>{
-//         dispatch({type: actionTypes.AUTH_LOADING});
-
-//         registerRequest(data)
-//         .then(response => {
-//             dispatch({type: actionTypes.REGISTER_SUCCESS});
-//             history.push('/login');  
-//         })
-//         .catch(err => {
-//             dispatch({type: actionTypes.AUTH_ERROR, error: err.message});  
-//         });
-//     }
-// }
-
-// export function login(data){
-
-//     return (dispatch)=>{
-//         dispatch({type: actionTypes.AUTH_LOADING});
-
-//         loginRequest(data)
-//         .then(token => {
-//             saveJWT(token);
-//             dispatch({type: actionTypes.LOGIN_SUCCESS});  
-//             history.push('/');
-//         })
-//         .catch(err => {
-//             dispatch({type: actionTypes.AUTH_ERROR, error: err.message});  
-//         });
-//     }
-// }
-
-// export function logout(){
-
-//     return async (dispatch)=>{
-//         dispatch({type: actionTypes.AUTH_LOADING});
-//         const jwt = getLocalJWT();
-//         if(jwt){
-//             request(`${apiUrl}/user/sign-out`, "POST", {jwt})
-//             .then(() => {
-//                 removeJWT();
-//                 dispatch({type: actionTypes.LOGOUT_SUCCESS});
-//                 history.push('/login');  
-//             })
-//             .catch(err => {
-//                 dispatch({type: actionTypes.AUTH_ERROR, error: err.message});  
-//             });
-
-//         }
-//         else {
-//             dispatch({type: actionTypes.LOGOUT_SUCCESS});
-//             history.push('/login');  
-//         } 
-//     }
-// }
+export function register(data, navigate) {
+    return function (dispatch) {
+      dispatch({ type: actionTypes.PENDING });
+      requestWithoutToken(`${apiHost}/user`, "POST", data)
+        .then(() => {
+          dispatch({
+            type: actionTypes.REGISTER_SUCCESS,
+          });
+          navigate("/login");
+        })
+        .catch((error) => {
+          dispatch({ type: actionTypes.ERROR, error: error.message });
+        });
+    };
+  }
+  
+  export function login(data, navigate) {
+    return function (dispatch) {
+      dispatch({ type: actionTypes.PENDING });
+      requestWithoutToken(`${apiHost}/user/sign-in`, "POST", data)
+        .then((res) => {
+          saveToken(res);
+          dispatch({
+            type: actionTypes.LOGIN_SUCCESS,
+          });
+          navigate("/");
+        })
+        .catch((error) => {
+          dispatch({ type: actionTypes.ERROR, error: error.message });
+        });
+    };
+  }
+  
+  export function logout(navigate) {
+    return async (dispatch) => {
+      dispatch({ type: actionTypes.AUTH_LOADING });
+      const jwt = getLocalJWT();
+      
+      if (jwt) {
+        request(navigate, `${apiHost}/user/sign-out`, "POST", { jwt })
+          .then(() => {
+            removeJWT();
+            dispatch({ type: actionTypes.LOGOUT_SUCCESS });
+            navigate("/login");
+          })
+          .catch((err) => {
+            dispatch({ type: actionTypes.AUTH_ERROR, error: err.message });
+          });
+      } else {
+        dispatch({ type: actionTypes.LOGOUT_SUCCESS });
+        navigate("/login");
+      }
+    };
+  }
 
 
 export function getUserInfo(){
