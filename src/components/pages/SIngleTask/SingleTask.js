@@ -1,13 +1,16 @@
 import React, { useEffect, useState } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faTrash, faPenToSquare } from "@fortawesome/free-solid-svg-icons";
-import { Card, Button, Container, Row, Col } from "react-bootstrap";
-import { formatDate } from "../../../helpers/utils";
-import EditTaskModal from "../../EditTaskModal";
-import { useParams } from "react-router";
-import { getSingleTask, deleteTask } from "../../../store/actions";
 import { connect } from "react-redux";
 import { useNavigate } from "react-router-dom";
+import { useParams } from "react-router";
+
+import { formatDate } from "../../../helpers/utils";
+import EditTaskModal from "../../EditTaskModal";
+import { getSingleTask, deleteTask } from "../../../store/actions";
+
+
+import { Card, Button, Container, Row, Col } from "react-bootstrap";
 
 function SingleTask(props) {
   const navigate = useNavigate();

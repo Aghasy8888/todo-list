@@ -1,7 +1,9 @@
 import React, { useState } from "react";
 import { connect } from "react-redux";
-import { getTasks } from "../../store/actions";
 import DatePicker from "react-datepicker";
+import { useNavigate } from "react-router";
+import { getTasks } from "../../store/actions";
+
 import "react-datepicker/dist/react-datepicker.css";
 import {
   InputGroup,
@@ -10,8 +12,6 @@ import {
   DropdownButton,
   Dropdown,
 } from "react-bootstrap";
-import { useNavigate } from "react-router";
-// import { useNavigate } from "react-router";
 
 const statusOptions = [
   {

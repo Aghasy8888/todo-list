@@ -1,7 +1,5 @@
 import request from "../helpers/request";
-import requestWithoutToken from "../helpers/auth";
 import * as actionTypes from "./actionTypes";
-import { saveToken, removeJWT, getLocalJWT } from "../helpers/auth";
 
 const apiHost = process.env.REACT_APP_API_HOST;
 

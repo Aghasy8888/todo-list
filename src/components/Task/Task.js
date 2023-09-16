@@ -1,8 +1,6 @@
 import React, { PureComponent } from "react";
-import { editTask } from "../../store/actions";
+import { Link } from "react-router-dom";
 import { connect } from "react-redux";
-import { Card, Button } from "react-bootstrap";
-import styles from "./taskStyle.module.css";
 import PropTypes from "prop-types";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
@@ -11,8 +9,12 @@ import {
   faCheck,
   faRedo,
 } from "@fortawesome/free-solid-svg-icons";
+
 import { formatDate, textTruncate } from "../../helpers/utils";
-import { Link } from "react-router-dom";
+import { editTask } from "../../store/actions";
+
+import { Card, Button } from "react-bootstrap";
+import styles from "./taskStyle.module.css";
 
 class Task extends PureComponent {
   static propTypes = {

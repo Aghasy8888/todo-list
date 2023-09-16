@@ -1,9 +1,11 @@
 import React from "react";
-import { Button, Navbar, Nav } from "react-bootstrap";
 import { NavLink, useNavigate } from "react-router-dom";
-import styles from "./navMenuStyle.module.css";
 import { connect } from "react-redux";
+
 import { logout } from "../../../store/userActions";
+
+import { Button, Navbar, Nav } from "react-bootstrap";
+import styles from "./navMenuStyle.module.css";
 
 function NavMenu({ isAuthenticated, logout }) {
   const navigate = useNavigate();

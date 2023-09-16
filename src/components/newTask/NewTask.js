@@ -1,11 +1,13 @@
 import React, { PureComponent } from "react";
-import { Button, Form, Modal } from "react-bootstrap";
-import PropTypes from "prop-types";
-import { formatDate } from "../../helpers/utils";
 import DatePicker from "react-datepicker";
-import "react-datepicker/dist/react-datepicker.css";
 import { connect } from "react-redux";
+import PropTypes from "prop-types";
+
+import { formatDate } from "../../helpers/utils";
 import { addTask } from "../../store/actions";
+
+import { Button, Form, Modal } from "react-bootstrap";
+import "react-datepicker/dist/react-datepicker.css";
 
 class NewTask extends PureComponent {
   static propTypes = {

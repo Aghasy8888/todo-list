@@ -1,16 +1,13 @@
 import React, { Component } from "react";
-import Container from "react-bootstrap/Container";
-import Row from "react-bootstrap/Row";
-import Col from "react-bootstrap/Col";
+import { connect } from "react-redux";
 import Task from "../../Task/Task";
 import NewTask from "../../newTask/NewTask";
 import Confirm from "../../Confirm";
 import Search from "../../Search/Search";
 import EditTaskModal from "../../EditTaskModal";
-import { connect } from "react-redux";
 import { getTasks, deleteTask, deleteTasks } from "../../../store/actions";
-import { Button } from "react-bootstrap";
 
+import { Button, Container, Row, Col } from "react-bootstrap";
 import styles from "./style.module.css";
 
 class ToDo extends Component {
